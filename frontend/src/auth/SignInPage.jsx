@@ -4,7 +4,7 @@ import React from 'react'
 function SignInPage() {
     return (
         <div className='justify-center items-center flex my-10'>
-            <SignIn fallbackRedirectUrl={"/dashboard"} />
+            <SignIn />
         </div>
     )
 }

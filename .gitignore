@@ -1,0 +1,39 @@
+# === Node.js (Frontend) ===
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+frontend/.vite/
+frontend/.next/
+frontend/.turbo/
+frontend/build/
+
+# Dependency Lock files
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+
+# Log files
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# === Python (Backend) ===
+backend/__pycache__/
+backend/venv/
+backend/.env
+backend/*.pyc
+*.pyc
+*.pyo
+*.pyd
+
+# VSCode settings (optional)
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# === Global environment files ===
+.env
+*.env.local
+*.env.*.local

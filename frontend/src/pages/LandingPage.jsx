@@ -1,19 +1,34 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
+// import axios from 'axios';
 
 function LandingPage() {
     const navigate = useNavigate();
     const { user, isLoaded, isSignedIn } = useUser();
+    // const [message, setMessage] = useState("");
 
     const handleGetStarted = () => {
-        // if (isLoaded && isSignedIn) {
-        navigate('/dashboard')
-        // } else {
-        //     navigate('/auth/sign-up');
-        // }
+        if (isLoaded && isSignedIn) {
+            navigate('/dashboard')
+        } else {
+            navigate('/auth/sign-up');
+        }
     }
+
+//     useEffect(() => {
+//     axios.get("http://127.0.0.1:8000")
+//       .then((res) => setMessage(res.data.message))
+//       .catch((err) => console.error(err));
+//   }, []);
+
+    useEffect(() => {
+        if (isLoaded && isSignedIn) {
+            navigate("/dashboard");
+        }
+    }, [user, isLoaded, isSignedIn]);
+
     return (
         <div className="bg-[#022C43] text-white font-sans">
             {/* Navbar */}
