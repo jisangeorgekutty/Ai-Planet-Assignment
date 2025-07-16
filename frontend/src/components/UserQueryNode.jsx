@@ -8,7 +8,7 @@ const UserQueryNode = ({ data }) => {
   return (
     <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
       {/* Source handle */}
-      <Handle type="source" position={Position.Bottom} className="bg-green-500 w-2 h-2" />
+      <Handle type="source" position={Position.Bottom} className="bg-blue-500 w-2 h-2" />
 
       {/* Header with icon and settings */}
       <div className="flex justify-between items-center mb-3">

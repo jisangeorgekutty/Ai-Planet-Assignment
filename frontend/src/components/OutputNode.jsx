@@ -1,25 +1,39 @@
-import { PanelRightOpen } from "lucide-react";
+import { Settings,FileOutput } from "lucide-react";
 import { Handle, Position } from "reactflow";
 
 const OutputNode = ({ data }) => {
-  return (
-    <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-xs relative">
-      {/* Incoming connection handle (top) */}
-      <Handle type="target" position={Position.Top} className="bg-blue-500 w-2 h-2" />
+    return (
+        <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
+            {/* Connection handles */}
+            <Handle type="target" position={Position.Top} className="bg-blue-500 w-2 h-2" />
 
-      <div className="flex items-center gap-2 mb-2">
-        <PanelRightOpen className="text-yellow-500" />
-        <h2 className="text-base font-semibold">Output</h2>
-      </div>
+            <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-2">
+                    <FileOutput className="text-gray-700 w-4 h-4" />
+                    <h2 className="text-sm font-semibold">Output</h2>
+                </div>
+                <div className="text-gray-500">
+                    <Settings className="w-4 h-4 text-black cursor-pointer" />
+                </div>
+            </div>
 
-      <div className="text-sm text-gray-700 whitespace-pre-wrap">
-        {data?.output || "Output will be generated based on query"}
-      </div>
+            {/* Subheader */}
+            <div className="bg-blue-100 text-black text-xs font-medium px-2 py-1 rounded mb-3">
+                Output of the result nodes as text
+            </div>
 
-      {/* Optional outgoing connection handle (bottom) */}
-      <Handle type="source" position={Position.Bottom} className="bg-green-500 w-2 h-2" />
-    </div>
-  );
+            {/* Output Label */}
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Output Text</label>
+
+            {/* Output Box */}
+            <div className="w-full bg-gray-100 text-gray-500 text-sm p-3 rounded-md min-h-[60px]">
+                {data?.output || "Output will be generated based on query"}
+            </div>
+
+            {/* Footer label */}
+            <p className="text-xs text-gray-500 mt-3">Output</p>
+        </div>
+    );
 };
 
 export default OutputNode;
