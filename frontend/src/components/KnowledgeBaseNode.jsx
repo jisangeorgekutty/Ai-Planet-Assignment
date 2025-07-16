@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Database } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Handle, Position } from "reactflow";
 
 const KnowledgeBaseNode = ({ data }) => {
@@ -13,7 +13,7 @@ const KnowledgeBaseNode = ({ data }) => {
       <Handle type="target" position={Position.Top} className="bg-blue-500 w-2 h-2" />
       
       <div className="flex items-center gap-2 mb-2">
-        <Database className="text-green-600" />
+        <BookOpen className="text-black" />
         <h2 className="text-base font-semibold">Knowledge Base</h2>
       </div>
 
