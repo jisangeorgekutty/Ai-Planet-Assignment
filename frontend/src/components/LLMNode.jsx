@@ -10,6 +10,7 @@ const LLMNode = ({ data }) => {
     const [serpApiKey, setSerpApiKey] = useState("");
     const [showAPIKey, setShowAPIKey] = useState(false);
     const [showSerpKey, setShowSerpKey] = useState(false);
+    const [temperature, setTemperature] = useState(0.75);
 
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
@@ -65,13 +66,16 @@ const LLMNode = ({ data }) => {
 
             {/* Temperature */}
             <label className="text-sm font-medium text-gray-700 mb-1 block">Temperature</label>
-            <select
+            <input
+                type="number"
+                step="0.01"
+                min="0"
+                max="1"
+                value={temperature}
+                onChange={(e) => setTemperature(e.target.value)}
                 className="mb-3 w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
-                value="0.75"
-                disabled
-            >
-                <option value="0.75">0.75</option>
-            </select>
+                placeholder="0.75"
+            />
 
             {/* WebSearch Toggle */}
             <div className="flex items-center justify-between mb-3">
