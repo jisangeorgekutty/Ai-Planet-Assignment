@@ -1,6 +1,6 @@
 import React from 'react'
 import LandingPage from './pages/LandingPage';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import Dashboard from './pages/Dashboard';
 import SignUpPage from './auth/SignUpPage';
@@ -11,10 +11,12 @@ import NavBar from './components/NavBar';
 
 
 function App() {
+  const location = useLocation();
+  const hideNavBarOnRoutes = ['/'];
   const { user, isLoaded, isSignedIn } = useUser();
   return (
     <div>
-      <NavBar />
+      {!hideNavBarOnRoutes.includes(location.pathname) && <NavBar />}
       <Routes>
         <Route exact path='/' element={<LandingPage />} />
         <Route path='/dashboard' element={<Dashboard />} />
