@@ -1,10 +1,30 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function NewStackModel({ isOpen, onClose }) {
- const [name, setName] = useState('');
+function NewStackModel({ isOpen, onClose,userId }) {
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const navigate = useNavigate();
+  console.log("User ID:", userId);
 
   if (!isOpen) return null;
+
+  const handleCreate = async () => {
+    try {
+      const res = await axios.post("http://localhost:8000/api/workflow/create-workflow", {
+        user_id: userId,
+        name,
+        description,
+      });
+
+      const stackId = res.data.workflow_id;
+      navigate(`/dashboard/workflow/${userId}`);
+    } catch (error) {
+      console.error("Error creating stack:", error);
+      alert("Something went wrong while creating the stack.");
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
@@ -41,6 +61,7 @@ function NewStackModel({ isOpen, onClose }) {
             Cancel
           </button>
           <button
+            onClick={handleCreate}
             disabled={!name.trim()}
             className={`text-sm px-4 py-2 rounded-md ${name.trim()
               ? 'bg-green-600 text-white hover:bg-green-700'

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import NavBar from '../components/NavBar';
 import NewStackModel from '../components/NewStackModel';
 import StackCard from '../components/StackCard';
+import { useUser } from '@clerk/clerk-react';
 
 function Dashboard() {
+    const { user } = useUser();
+    const userId = user?.id;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const stacks = [
         { title: 'Chat With AI', description: 'Chat with a smart AI' },
@@ -46,7 +48,7 @@ function Dashboard() {
                     </div>
                 )}
             </div>
-            <NewStackModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <NewStackModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} userId={userId} />
         </div>
     );
 }

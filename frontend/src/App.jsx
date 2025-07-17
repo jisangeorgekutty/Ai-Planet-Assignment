@@ -22,7 +22,7 @@ function App() {
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/auth/sign-in' element={<SignInPage />} />
         <Route path='/auth/sign-up' element={<SignUpPage />} />
-        <Route path='/dashboard/workflow' element={<WorkFlowPage />} />
+        <Route path='/dashboard/workflow/:id' element={<WorkFlowPage />} />
       </Routes>
     </div>
   )

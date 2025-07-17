@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routes import workflow 
 
 app = FastAPI()
+
+app.include_router(workflow.router, prefix="/api/workflow")
 
 @app.get("/")
 def read_root():
