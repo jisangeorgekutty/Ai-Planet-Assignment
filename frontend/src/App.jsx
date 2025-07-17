@@ -7,6 +7,7 @@ import SignUpPage from './auth/SignUpPage';
 import SignInPage from './auth/SignInPage';
 import WorkFlowPage from './pages/WorkFlowPage';
 import NavBar from './components/NavBar';
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -17,6 +18,7 @@ function App() {
   return (
     <div>
       {!hideNavBarOnRoutes.includes(location.pathname) && <NavBar />}
+      <Toaster/>
       <Routes>
         <Route exact path='/' element={<LandingPage />} />
         <Route path='/dashboard' element={<Dashboard />} />

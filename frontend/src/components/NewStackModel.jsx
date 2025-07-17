@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function NewStackModel({ isOpen, onClose, userId, editData = null, onUpdate }) {
   const [name, setName] = useState('');
@@ -30,7 +31,7 @@ function NewStackModel({ isOpen, onClose, userId, editData = null, onUpdate }) {
           name,
           description,
         });
-        alert('Stack updated');
+        toast.success('Stack updated');
         if (onUpdate) onUpdate();
         onClose();
       } else {
@@ -40,11 +41,12 @@ function NewStackModel({ isOpen, onClose, userId, editData = null, onUpdate }) {
           description,
         });
         if (onUpdate) onUpdate();
+        toast.success('Stack Created')
         navigate(`/dashboard/workflow/${userId}`);
       }
     } catch (error) {
       console.error("Error creating stack:", error);
-      alert("Something went wrong while creating the stack.");
+      toast.error("Something went wrong while creating the stack.");
     }
   };
 
