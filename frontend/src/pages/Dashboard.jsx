@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NewStackModel from '../components/NewStackModel';
 import StackCard from '../components/StackCard';
 import { useUser } from '@clerk/clerk-react';
+import axios from 'axios';
 
 function Dashboard() {
     const { user } = useUser();
     const userId = user?.id;
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const stacks = [
-        { title: 'Chat With AI', description: 'Chat with a smart AI' },
-        { title: 'Content Writer', description: 'Helps you write content' },
-        { title: 'Content Summarizer', description: 'Helps you summarize content' },
-        { title: 'Information Finder', description: 'Helps you find relevant information' },
-    ];
+    const [stacks, setStacks] = useState([]);
+    const [editStackData, setEditStackData] = useState(null);
+
+    console.log('edit stack data:', editStackData);
+
+    useEffect(() => {
+        if (userId) {
+            fetchStacks();
+        }
+    }, [userId]);
+
+    const fetchStacks = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8000/api/workflow/user-stacks?user_id=${userId}`);
+            setStacks(res.data);
+        } catch (err) {
+            console.error('Failed to fetch stacks:', err);
+        }
+    };
 
     const hasStacks = stacks.length > 0;
 
@@ -30,8 +44,11 @@ function Dashboard() {
                 <div className="h-[1px] w-full max-w-[95%] mx-auto bg-gray-300 mb-5 mt-5" />
                 {hasStacks ? (
                     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                        {stacks.map((stack, idx) => (
-                            <StackCard key={idx} title={stack.title} description={stack.description} />
+                        {stacks.map((stack, index) => (
+                            <StackCard key={index} title={stack.name} description={stack.description} onEdit={() => {
+                                setEditStackData(stack);
+                                setIsModalOpen(true);
+                            }} />
                         ))}
                     </div>
                 ) : (
@@ -48,7 +65,7 @@ function Dashboard() {
                     </div>
                 )}
             </div>
-            <NewStackModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} userId={userId} />
+            <NewStackModel isOpen={isModalOpen} onClose={() => { setIsModalOpen(false); setEditStackData(null); }} userId={userId} editData={editStackData} onUpdate={fetchStacks} />
         </div>
     );
 }

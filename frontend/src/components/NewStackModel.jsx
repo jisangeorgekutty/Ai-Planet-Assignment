@@ -1,36 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function NewStackModel({ isOpen, onClose,userId }) {
+function NewStackModel({ isOpen, onClose, userId, editData = null, onUpdate }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
   console.log("User ID:", userId);
 
+
+  useEffect(() => {
+    if (editData) {
+      setName(editData.name || '');
+      setDescription(editData.description || '');
+    } else {
+      setName('');
+      setDescription('');
+    }
+  }, [editData, isOpen]);
+
   if (!isOpen) return null;
 
   const handleCreate = async () => {
     try {
-      const res = await axios.post("http://localhost:8000/api/workflow/create-workflow", {
-        user_id: userId,
-        name,
-        description,
-      });
-
-      const stackId = res.data.workflow_id;
-      navigate(`/dashboard/workflow/${userId}`);
+      if (editData) {
+        console.log("Editing existing stack:", editData.id);
+        await axios.put(`http://localhost:8000/api/workflow/update/${editData.id}`, {
+          user_id: userId,
+          name,
+          description,
+        });
+        alert('Stack updated');
+        if (onUpdate) onUpdate();
+        onClose();
+      } else {
+        const res = await axios.post("http://localhost:8000/api/workflow/create-workflow", {
+          user_id: userId,
+          name,
+          description,
+        });
+        if (onUpdate) onUpdate();
+        navigate(`/dashboard/workflow/${userId}`);
+      }
     } catch (error) {
       console.error("Error creating stack:", error);
       alert("Something went wrong while creating the stack.");
     }
   };
 
+
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Create New Stack</h2>
+          <h2 className="text-lg font-semibold">{editData ? 'Edit Stack' : 'Create New Stack'}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-800">&times;</button>
         </div>
         <div className="space-y-4">
@@ -67,7 +90,7 @@ function NewStackModel({ isOpen, onClose,userId }) {
               ? 'bg-green-600 text-white hover:bg-green-700'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
           >
-            Create
+            {editData ? 'Done' : 'Create'}
           </button>
         </div>
       </div>
