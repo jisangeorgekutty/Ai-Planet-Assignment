@@ -50,3 +50,17 @@ def update_workflow(workflow_id: int, payload: WorkflowCreateRequest):
     db.refresh(workflow)
     db.close()
     return {"message": "Workflow updated"}
+
+@router.get("/{workflow_id}")
+def get_workflow(workflow_id: int):
+    db = SessionLocal()
+    workflow = db.query(Workflow).filter(Workflow.id == workflow_id).first()
+    db.close()
+    if workflow:
+        return {
+            "id": workflow.id,
+            "name": workflow.name,
+            "description": workflow.description,
+            "user_id": workflow.user_id
+        }
+    return {"error": "Workflow not found"}

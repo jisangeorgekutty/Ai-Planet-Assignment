@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ReactFlowProvider } from "reactflow";
 import Sidebar from "../components/SideBar";
 import FlowCanvas from "../components/FlowCanvas";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const WorkFlowPage = () => {
+  const { stackId } = useParams();
+  const [stack, setStack] = useState(null);
+  console.log("Stack ID from URL:", stackId);
+  useEffect(() => {
+    const fetchStack = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/api/workflow/${stackId}`);
+        setStack(res.data);
+      } catch (error) {
+        console.error("Failed to fetch stack:", error);
+      }
+    };
+
+    fetchStack();
+  }, [stackId]);
+
+  if (!stack) return <div>Loading...</div>;
+
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
@@ -12,7 +32,7 @@ const WorkFlowPage = () => {
   return (
     <ReactFlowProvider>
       <div className="flex h-screen overflow-hidden">
-        <Sidebar onDragStart={onDragStart} />
+        <Sidebar onDragStart={onDragStart} stack={stack} />
         <FlowCanvas />
       </div>
     </ReactFlowProvider>

@@ -41,8 +41,9 @@ function NewStackModel({ isOpen, onClose, userId, editData = null, onUpdate }) {
           description,
         });
         if (onUpdate) onUpdate();
-        toast.success('Stack Created')
-        navigate(`/dashboard/workflow/${userId}`);
+        toast.success('Stack Created');
+        const stackId = res.data.workflow_id;
+        navigate(`/dashboard/workflow/${stackId}`);
       }
     } catch (error) {
       console.error("Error creating stack:", error);
