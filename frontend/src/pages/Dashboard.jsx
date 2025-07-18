@@ -3,6 +3,7 @@ import NewStackModel from '../components/NewStackModel';
 import StackCard from '../components/StackCard';
 import { useUser } from '@clerk/clerk-react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
     const { user } = useUser();
@@ -10,6 +11,7 @@ function Dashboard() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [stacks, setStacks] = useState([]);
     const [editStackData, setEditStackData] = useState(null);
+    const navigate=useNavigate();
 
     console.log('edit stack data:', editStackData);
 
@@ -45,7 +47,7 @@ function Dashboard() {
                 {hasStacks ? (
                     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                         {stacks.map((stack, index) => (
-                            <StackCard key={index} title={stack.name} description={stack.description} onEdit={() => {
+                            <StackCard key={index} id={stack.id} title={stack.name} description={stack.description} onEdit={() => {
                                 setEditStackData(stack);
                                 setIsModalOpen(true);
                             }} />

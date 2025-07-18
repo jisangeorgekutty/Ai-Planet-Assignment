@@ -1,12 +1,50 @@
 import { useState } from "react";
 import { BookOpen, Eye, Settings, Upload } from "lucide-react";
 import { Handle, Position } from "reactflow";
+import axios from "axios";
 
 const KnowledgeBaseNode = ({ data }) => {
     const [file, setFile] = useState(null);
-    const [embeddingModel, setEmbeddingModel] = useState("text-embedding-3-large");
+    const [embeddingModel, setEmbeddingModel] = useState("gemini-gecko");
     const [apiKey, setApiKey] = useState("");
     const [showApiKey, setShowApiKey] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [context, setContext] = useState("");
+
+    const userQuery = data?.userQuery || "Explain AI in simple terms";
+
+    const handleProcessKnowledgeBase = async () => {
+        if (!file || !apiKey || !userQuery) {
+            alert("Missing file, API key or query!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("embedding_model", embeddingModel);
+        formData.append("api_key", apiKey);
+        formData.append("user_query", userQuery);
+
+        setIsProcessing(true);
+
+        try {
+            const response = await axios.post("http://localhost:8000/api/knowledge-base/upload-doc/", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            const contextResponse = response.data?.relevant_chunks?.join(" ");
+            setContext(contextResponse);
+            alert("Context retrieved from knowledge base.");
+            // TODO: Pass context to next node (LLMNode)
+        } catch (err) {
+            console.error("Error processing knowledge base:", err);
+            alert("Failed to process document.");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
@@ -47,6 +85,7 @@ const KnowledgeBaseNode = ({ data }) => {
                 onChange={(e) => setEmbeddingModel(e.target.value)}
                 className="w-full border border-gray-300 rounded p-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
+                <option value="gemini-gecko@003">textembedding-gecko@003</option>
                 <option value="text-embedding-3-large">text-embedding-3-large</option>
                 <option value="text-embedding-ada-002">text-embedding-ada-002</option>
             </select>
@@ -66,6 +105,26 @@ const KnowledgeBaseNode = ({ data }) => {
                     onClick={() => setShowApiKey(!showApiKey)}
                 />
             </div>
+
+            {/* Process Button */}
+            <button
+                onClick={handleProcessKnowledgeBase}
+                disabled={isProcessing}
+                className={`w-full text-sm py-2 rounded-md ${isProcessing
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                    }`}
+            >
+                {isProcessing ? "Processing..." : "Generate Context"}
+            </button>
+
+            {/* Output context preview (optional) */}
+            {context && (
+                <div className="mt-4 text-xs text-gray-700 border-t pt-2">
+                    <strong>Context:</strong>
+                    <p className="mt-1 line-clamp-3 max-h-20 overflow-y-auto">{context}</p>
+                </div>
+            )}
         </div>
     );
 };

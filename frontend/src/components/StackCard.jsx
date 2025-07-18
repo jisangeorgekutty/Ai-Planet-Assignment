@@ -1,9 +1,11 @@
 import React from 'react'
 import { ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-function StackCard({ title, description, onEdit }) {
+function StackCard({ title, id, description, onEdit }) {
+    const navigate = useNavigate();
     return (
-        <div className="bg-white rounded-xl border border-gray-200 p-4 w-full max-w-xs shadow-sm hover:shadow-md transition duration-200 mx-auto">
+        <div onClick={() => navigate(`/dashboard/workflow/${id}`)} className="bg-white rounded-xl border border-gray-200 p-4 w-full max-w-xs shadow-sm hover:shadow-md transition duration-200 mx-auto cursor-pointer">
             <div className="flex flex-col justify-between h-full">
                 <div>
                     <h3 className="font-semibold text-gray-800 text-base mb-1">{title}</h3>
