@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
@@ -17,12 +17,6 @@ function LandingPage() {
         }
     }
 
-//     useEffect(() => {
-//     axios.get("http://127.0.0.1:8000")
-//       .then((res) => setMessage(res.data.message))
-//       .catch((err) => console.error(err));
-//   }, []);
-
     useEffect(() => {
         if (isLoaded && isSignedIn) {
             navigate("/dashboard");
@@ -34,10 +28,20 @@ function LandingPage() {
             {/* Navbar */}
             <nav className="flex justify-between items-center px-6 py-4 border-b border-white/10 bg-[#022C43]">
                 <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-green-500 rounded-full" />
-                    <span className="text-xl font-semibold">ai planet</span>
-                    <span className="text-xs text-white/60">Formerly DPhi</span>
+                    <div className="flex items-center space-x-2">
+                        <img
+                            src="/main-logo.jpg"
+                            alt="AI Planet Logo"
+                            className="w-8 h-8 rounded-full object-cover"
+                        />
+                    </div>
+
+                    <div className="flex flex-col">
+                        <span className="text-xl font-semibold">Ai Planet</span>
+                        <span className="text-xs text-white/60 -mt-1">formerly <span className='text-xs text-green-500'>DPhi</span></span>
+                    </div>
                 </div>
+
                 <div className="hidden md:flex space-x-6 text-white/80 items-center">
                     <a href="#" className="hover:text-white flex items-center space-x-1">
                         <span>Products</span> <ChevronDown size={16} />

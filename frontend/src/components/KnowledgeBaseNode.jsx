@@ -9,6 +9,7 @@ const KnowledgeBaseNode = () => {
     const [apiKey, setApiKey] = useState("");
     const [showApiKey, setShowApiKey] = useState(false);
 
+
     const sampleContext = "Artificial Intelligence (AI) has the potential to revolutionize education by personalizing learning, automating administrative tasks, and providing real-time feedback to both students and teachers.However, challenges remain in areas such as data privacy, equity of access, and the need for teacher training.Successful integration of AI requires a careful balance between innovation and ethical considerations, ensuring that technology enhances rather than replaces the human element in education."
 
     const { setKBInputs } = useWorkflowStore();
@@ -45,12 +46,19 @@ const KnowledgeBaseNode = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">File for Knowledge Base</label>
             <div className="w-full mb-3">
                 <label className="border border-dashed border-green-700 rounded-md p-3 text-center text-sm text-green-700 cursor-pointer block hover:bg-gray-50">
-                    <input type="file" onChange={(e) => setFile(e.target.files[0])} className="hidden" />
-
-                    <div className="flex justify-center"><span className="text-sm">Upload File </span> <Upload className="pl-3 w-6 h-6 text-green-700 cursor-pointer" /></div>
+                    <input
+                        type="file"
+                        onChange={(e) => setFile(e.target.files[0])}
+                        className="hidden"
+                    />
+                    <div className="flex justify-center items-center gap-2">
+                        <span className="text-sm truncate max-w-[150px]">
+                            {file ? file.name : "Upload File"}
+                        </span>
+                        <Upload className="w-5 h-5 text-green-700" />
+                    </div>
                 </label>
             </div>
-
             {/* Embedding Model Select */}
             <label className="block text-sm font-medium text-gray-700 mb-1">Embedding Model</label>
             <select

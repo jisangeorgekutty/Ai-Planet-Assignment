@@ -20,6 +20,8 @@ export const useWorkflowStore = create((set, get) => ({
 
     output: "",
 
+    chatMessages: [],
+
     setUserQuery: (query) => {
         set({ userQuery: query })
         console.log("User Query set to:", query);
@@ -93,6 +95,47 @@ export const useWorkflowStore = create((set, get) => ({
             // toast.error("LLM API Failed");
         }
     },
+
+    addChatMessage: (message) => {
+        set((state) => ({
+            chatMessages: [...state.chatMessages, message],
+        }));
+    },
+
+    sendChatQuery: async (userQuery) => {
+        const { model, apiKey, temperature, context, addChatMessage } = get();
+
+        if (!userQuery || !model || !apiKey) {
+            toast.error("Missing values for chat.");
+            return;
+        }
+
+        // Build prompt with current context
+        const prompt = `CONTEXT: ${context || "No context provided"}\nUser Query: ${userQuery}, response gives in a concise manner.`;
+
+        try {
+            const formData = new FormData();
+            formData.append("model", model);
+            formData.append("api_key", apiKey);
+            formData.append("prompt", prompt);
+            formData.append("temperature", temperature);
+
+            const response = await axios.post("http://localhost:8000/api/llm/llm-model/", formData);
+            const answer = response.data?.response || "No response received";
+
+            addChatMessage({ role: "user", content: userQuery });
+            addChatMessage({ role: "assistant", content: answer });
+
+            toast.success("Chat response received!");
+        } catch (err) {
+            console.error("Chat error:", err);
+            toast.error("Failed to get chat response.");
+        }
+    },
+
+
+
+
 }));
 
 
