@@ -61,18 +61,26 @@ const FlowCanvas = () => {
         [project, setNodes]
     );
 
-    const { callLLMAPI, callKnowledgeBaseAPI, output } = useWorkflowStore();
+    const { callLLMAPI, callKnowledgeBaseAPI, context } = useWorkflowStore();
 
     const handleBuildStack = async () => {
         setIsBuilding(true);
         try {
-            console.log("Step 1: Calling Knowledge Base API...");
-            const context = await callKnowledgeBaseAPI();
+            const hasKnowledgeBase = nodes.some((node) => node.type === "knowledgeBase");
+            if (hasKnowledgeBase) {
+                console.log("Step 1: Calling Knowledge Base API...");
+                const context = await callKnowledgeBaseAPI();
 
-            if (!context) {
-                toast.error("Knowledge base failed. Check inputs.");
-                return;
+                if (!context) {
+                    toast.error("Knowledge base failed. Check inputs.");
+                    return;
+                }
+                console.log("Knowledge Base Context:", context);
+            } else {
+                useWorkflowStore.setState({ context: "" });
+                console.log("No Knowledge Base node found. Skipping context generation.");
             }
+
 
             console.log("Step 2: Calling LLM API...");
             const llmResponse = await callLLMAPI();
@@ -81,11 +89,10 @@ const FlowCanvas = () => {
                 toast.error("LLM failed. Check inputs.");
                 return;
             }
-
-            toast.success("Build complete!");
+            toast.success("Build Stack Complete!");
             console.log("Build complete! :");
         } catch (error) {
-            console.error("Build stack failed:", err);
+            console.error("Build stack failed:", error);
             toast.error("Build stack failed")
         } finally {
             setIsBuilding(false);

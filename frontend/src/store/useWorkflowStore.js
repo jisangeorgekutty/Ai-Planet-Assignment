@@ -63,7 +63,6 @@ export const useWorkflowStore = create((set, get) => ({
     setLLMInputs: ({ model, apiKey, prompt, temperature, webSearch, serpApiKey }) => {
         set({ model, apiKey, prompt, temperature, webSearch, serpApiKey });
         console.log("LLM Inputs set:", { model, apiKey, prompt, temperature, webSearch, serpApiKey });
-        toast.success("LLM Inputs Received");
     },
 
     callLLMAPI: async () => {
@@ -88,7 +87,6 @@ export const useWorkflowStore = create((set, get) => ({
 
             const responseText = response.data?.response || "";
             set({ output: responseText });
-            toast.success("LLM Response Received");
             return responseText;
         } catch (err) {
             console.error("LLM API Error:", err);

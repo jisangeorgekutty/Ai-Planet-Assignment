@@ -15,17 +15,10 @@ const LLMNode = () => {
     const { context, userQuery, setLLMInputs } = useWorkflowStore();
 
 
-    const sampleUserQuery = "Summarize the main idea.";
-    const sampleContext = "The document discusses the role of AI in education...";
-
     useEffect(() => {
-        if (context && userQuery) {
-            const dynamicPrompt = `You are a helpful PDF assistant. Use web search if the PDF lacks context\n\nCONTEXT: ${context}\nUser Query: ${userQuery}`;
-            setPrompt(dynamicPrompt);
-        } else {
-            const dynamicPrompt = `You are a helpful PDF assistant. Use web search if the PDF lacks context\n\nCONTEXT: ${sampleContext}\nUser Query: ${sampleUserQuery}`
-            setPrompt(dynamicPrompt);;
-        }
+        const promptPrefix = "You are an intelligent assistant specialized in analyzing PDF documents.Instructions:1. Use the provided CONTEXT from the uploaded PDF to answer the user query.2. If the CONTEXT is insufficient or does not contain relevant information, optionally use web search to enhance your response.Response just in a few 3 lines.";
+        const promptBody = context?.trim() ? `CONTEXT:\n${context}\n\nUSER QUERY:\n${userQuery}` : `NOTE: No context provided.\n\nUSER QUERY:\n${userQuery}`;
+        setPrompt(`${promptPrefix}${promptBody}`);
     }, [context, userQuery]);
 
     useEffect(() => {
