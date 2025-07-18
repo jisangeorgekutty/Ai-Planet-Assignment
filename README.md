@@ -11,7 +11,6 @@ A no-code/low-code web application that enables users to visually design and exe
 - Document upload and processing with text extraction (PyMuPDF)
 - Context-aware responses using OpenAI/Gemini LLMs
 - Real-time chat interface with memory
-- Support for web search integration via SerpAPI or Brave
 - Workflow validation and execution engine
 - Optional: Workflow saving, logs, chat history, and authentication
 
@@ -27,7 +26,6 @@ A no-code/low-code web application that enables users to visually design and exe
 | Vector Store| ChromaDB         |
 | Embeddings  | OpenAI, Gemini   |
 | LLM         | OpenAI GPT, Gemini |
-| Search API  | SerpAPI / Brave  |
 | File Parsing| PyMuPDF          |
 
 ---
@@ -46,7 +44,6 @@ A no-code/low-code web application that enables users to visually design and exe
 ### 3. **LLM Engine Component**
 - Accepts query and optional context
 - Sends prompt to OpenAI/Gemini models
-- Optional web lookup using SerpAPI
 
 ### 4. **Output Component**
 - Displays final response as a chat
@@ -79,7 +76,7 @@ Using PostgreSQL to persist:
 - Document metadata
 - Workflow definitions (optional)
 - Chat logs (optional)
-- User authentication data (if implemented)
+- User authentication data
 
 ---
 
@@ -94,6 +91,14 @@ Using PostgreSQL to persist:
 ### Frontend
 
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev
+```
+### Backend
+
+```bash
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate
+uvicorn main:app --reload
