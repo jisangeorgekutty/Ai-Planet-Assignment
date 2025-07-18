@@ -14,6 +14,8 @@ import UserQueryNode from "../components/UserQueryNode";
 import KnowledgeBaseNode from "../components/KnowledgeBaseNode";
 import LLMNode from "../components/LLMNode";
 import OutputNode from "../components/OutputNode";
+import { useWorkflowStore } from "../store/useWorkflowStore";
+import toast from "react-hot-toast";
 
 const nodeTypes = {
     userQuery: UserQueryNode,
@@ -31,6 +33,7 @@ const FlowCanvas = () => {
     const { project, zoomIn, zoomOut, fitView } = useReactFlow();
     const { zoom } = useViewport();
     const [showChat, setShowChat] = useState(false);
+    const [isBuilding, setIsBuilding] = useState(false);
 
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
@@ -58,6 +61,36 @@ const FlowCanvas = () => {
         [project, setNodes]
     );
 
+    const { callLLMAPI, callKnowledgeBaseAPI, output } = useWorkflowStore();
+
+    const handleBuildStack = async () => {
+        setIsBuilding(true);
+        try {
+            console.log("Step 1: Calling Knowledge Base API...");
+            const context = await callKnowledgeBaseAPI();
+
+            if (!context) {
+                toast.error("Knowledge base failed. Check inputs.");
+                return;
+            }
+
+            console.log("Step 2: Calling LLM API...");
+            const llmResponse = await callLLMAPI();
+
+            if (!llmResponse) {
+                toast.error("LLM failed. Check inputs.");
+                return;
+            }
+
+            toast.success("Build complete!");
+            console.log("Build complete! :");
+        } catch (error) {
+            console.error("Build stack failed:", err);
+            toast.error("Build stack failed")
+        } finally {
+            setIsBuilding(false);
+        }
+    }
     return (
         <div className="flex-1 relative">
             <ReactFlow
@@ -104,8 +137,12 @@ const FlowCanvas = () => {
 
             <div className="absolute bottom-20 right-4 flex flex-col gap-3 items-end">
                 <div className="group relative">
-                    <button className="w-10 h-10 flex items-center justify-center bg-green-600 hover:bg-green-700 text-white rounded-full transition-all duration-300 shadow-lg">
-                        <Save size={18} />
+                    <button onClick={handleBuildStack} className="w-10 h-10 flex items-center justify-center bg-green-600 hover:bg-green-700 text-white rounded-full transition-all duration-300 shadow-lg">
+                        {isBuilding ? (
+                            <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                        ) : (
+                            <Save size={18} />
+                        )}
                     </button>
                     <div className="opacity-0 group-hover:opacity-100 absolute right-full top-1/2 transform -translate-y-1/2 mr-3 px-3 py-1.5 bg-white text-gray-800 text-sm font-medium rounded-lg shadow-md whitespace-nowrap transition-all duration-300 pointer-events-none">
                         <h2 className="text-black">Build Stack</h2>

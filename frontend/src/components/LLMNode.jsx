@@ -1,16 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bot, Eye } from "lucide-react";
 import { Handle, Position } from "reactflow";
+import { useWorkflowStore } from "../store/useWorkflowStore";
 
-const LLMNode = ({ data }) => {
-    const [model, setModel] = useState("GPT 4o- Mini");
+const LLMNode = () => {
+    const [model, setModel] = useState("Gemini-flash-");
     const [apiKey, setApiKey] = useState("");
-    const [prompt, setPrompt] = useState(`You are a helpful PDF assistant. Use web search if the PDF lacks context\n\nCONTEXT: {context}\nUser Query: {query}`);
+    const [prompt, setPrompt] = useState("");
     const [webSearch, setWebSearch] = useState(true);
     const [serpApiKey, setSerpApiKey] = useState("");
     const [showAPIKey, setShowAPIKey] = useState(false);
     const [showSerpKey, setShowSerpKey] = useState(false);
     const [temperature, setTemperature] = useState(0.75);
+    const { context, userQuery, setLLMInputs } = useWorkflowStore();
+
+
+    const sampleUserQuery = "Summarize the main idea.";
+    const sampleContext = "The document discusses the role of AI in education...";
+
+    useEffect(() => {
+        if (context && userQuery) {
+            const dynamicPrompt = `You are a helpful PDF assistant. Use web search if the PDF lacks context\n\nCONTEXT: ${context}\nUser Query: ${userQuery}`;
+            setPrompt(dynamicPrompt);
+        } else {
+            const dynamicPrompt = `You are a helpful PDF assistant. Use web search if the PDF lacks context\n\nCONTEXT: ${sampleContext}\nUser Query: ${sampleUserQuery}`
+            setPrompt(dynamicPrompt);;
+        }
+    }, [context, userQuery]);
+
+    useEffect(() => {
+        if (model && apiKey && prompt) {
+            setLLMInputs({
+                model,
+                apiKey,
+                prompt,
+                temperature: parseFloat(temperature),
+                webSearch,
+                serpApiKey,
+            });
+        }
+    }, [model, apiKey, prompt, temperature, webSearch, serpApiKey]);
+
 
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
@@ -21,11 +51,11 @@ const LLMNode = ({ data }) => {
             {/* Header */}
             <div className="flex items-center gap-2 mb-2">
                 <Bot className="text-purple-600 w-4 h-4" />
-                <h2 className="text-sm font-semibold">LLM (OpenAI)</h2>
+                <h2 className="text-sm font-semibold">LLM</h2>
             </div>
 
             <div className="bg-blue-100 text-black text-xs font-medium px-2 py-1 rounded mb-3">
-                Run a query with OpenAI LLM
+                Run a query with OpenAI / Gemini LLM
             </div>
 
             {/* Model Dropdown */}
@@ -36,6 +66,7 @@ const LLMNode = ({ data }) => {
                 className="mb-3 w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
             >
                 <option value="GPT 4o- Mini">GPT 4o- Mini</option>
+                <option value="Gemini-flash">Gemini-1.5-flash</option>
                 <option value="GPT-4">GPT-4</option>
                 <option value="GPT-3.5-Turbo">GPT-3.5-Turbo</option>
             </select>
@@ -92,23 +123,25 @@ const LLMNode = ({ data }) => {
                 </label>
             </div>
 
-            <hr className="my-3 border-t border-gray-200" />
-
-            {/* SERP API */}
-            <label className="text-sm font-medium text-gray-700 mb-1 block">SERF API</label>
-            <div className="relative mb-2">
-                <input
-                    type={showSerpKey ? "text" : "password"}
-                    value={serpApiKey}
-                    onChange={(e) => setSerpApiKey(e.target.value)}
-                    placeholder="***************"
-                    className="w-full border border-gray-300 rounded p-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-purple-400"
-                />
-                <Eye
-                    className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                    onClick={() => setShowSerpKey(!showSerpKey)}
-                />
-            </div>
+            {webSearch && (
+                <>
+                    <hr className="my-3 border-t border-gray-200" />
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">SerpAPI Key</label>
+                    <div className="relative mb-2">
+                        <input
+                            type={showSerpKey ? "text" : "password"}
+                            value={serpApiKey}
+                            onChange={(e) => setSerpApiKey(e.target.value)}
+                            placeholder="***************"
+                            className="w-full border border-gray-300 rounded p-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        />
+                        <Eye
+                            className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                            onClick={() => setShowSerpKey(!showSerpKey)}
+                        />
+                    </div>
+                </>
+            )}
 
             {/* Output label (non-editable footer text style) */}
             <div className="text-xs text-black mt-1 justify-center text-center">Output</div>

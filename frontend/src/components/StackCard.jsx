@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 function StackCard({ title, id, description, onEdit }) {
     const navigate = useNavigate();
     return (
-        <div onClick={() => navigate(`/dashboard/workflow/${id}`)} className="bg-white rounded-xl border border-gray-200 p-4 w-full max-w-xs shadow-sm hover:shadow-md transition duration-200 mx-auto cursor-pointer">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 w-full max-w-xs shadow-sm hover:shadow-md transition duration-200 mx-auto">
             <div className="flex flex-col justify-between h-full">
-                <div>
+                <div onClick={() => navigate(`/dashboard/workflow/${id}`)} className='cursor-pointer'>
                     <h3 className="font-semibold text-gray-800 text-base mb-1">{title}</h3>
                     <p className="text-sm text-gray-500 mb-4 min-h-[40px]">{description}</p>
                 </div>

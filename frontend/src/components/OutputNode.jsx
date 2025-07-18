@@ -1,7 +1,9 @@
-import { Settings,FileOutput } from "lucide-react";
+import { Settings, FileOutput } from "lucide-react";
 import { Handle, Position } from "reactflow";
+import { useWorkflowStore } from "../store/useWorkflowStore";
 
-const OutputNode = ({ data }) => {
+const OutputNode = () => {
+    const { output } = useWorkflowStore();
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
             {/* Connection handles */}
@@ -27,7 +29,7 @@ const OutputNode = ({ data }) => {
 
             {/* Output Box */}
             <div className="w-full bg-gray-100 text-gray-500 text-sm p-3 rounded-md min-h-[60px]">
-                {data?.output || "Output will be generated based on query"}
+                {output ? output : "Output will be generated based on query"}
             </div>
 
             {/* Footer label */}

@@ -1,50 +1,23 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { BookOpen, Eye, Settings, Upload } from "lucide-react";
 import { Handle, Position } from "reactflow";
-import axios from "axios";
+import { useWorkflowStore } from "../store/useWorkflowStore";
 
-const KnowledgeBaseNode = ({ data }) => {
+const KnowledgeBaseNode = () => {
     const [file, setFile] = useState(null);
     const [embeddingModel, setEmbeddingModel] = useState("gemini-gecko");
     const [apiKey, setApiKey] = useState("");
     const [showApiKey, setShowApiKey] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [context, setContext] = useState("");
+    const sampleContext="The document discusses the role of AI in education..."
 
-    const userQuery = data?.userQuery || "Explain AI in simple terms";
+    const { setKBInputs } = useWorkflowStore();
 
-    const handleProcessKnowledgeBase = async () => {
-        if (!file || !apiKey || !userQuery) {
-            alert("Missing file, API key or query!");
-            return;
+
+    useEffect(() => {
+        if (file && embeddingModel && apiKey) {
+            setKBInputs({ file, embeddingModel, apiKey,sampleContext });
         }
-
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("embedding_model", embeddingModel);
-        formData.append("api_key", apiKey);
-        formData.append("user_query", userQuery);
-
-        setIsProcessing(true);
-
-        try {
-            const response = await axios.post("http://localhost:8000/api/knowledge-base/upload-doc/", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            const contextResponse = response.data?.relevant_chunks?.join(" ");
-            setContext(contextResponse);
-            alert("Context retrieved from knowledge base.");
-            // TODO: Pass context to next node (LLMNode)
-        } catch (err) {
-            console.error("Error processing knowledge base:", err);
-            alert("Failed to process document.");
-        } finally {
-            setIsProcessing(false);
-        }
-    };
+    }, [file, embeddingModel, apiKey,sampleContext]);
 
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
@@ -105,26 +78,6 @@ const KnowledgeBaseNode = ({ data }) => {
                     onClick={() => setShowApiKey(!showApiKey)}
                 />
             </div>
-
-            {/* Process Button */}
-            <button
-                onClick={handleProcessKnowledgeBase}
-                disabled={isProcessing}
-                className={`w-full text-sm py-2 rounded-md ${isProcessing
-                    ? "bg-gray-400 text-white cursor-not-allowed"
-                    : "bg-green-600 text-white hover:bg-green-700"
-                    }`}
-            >
-                {isProcessing ? "Processing..." : "Generate Context"}
-            </button>
-
-            {/* Output context preview (optional) */}
-            {context && (
-                <div className="mt-4 text-xs text-gray-700 border-t pt-2">
-                    <strong>Context:</strong>
-                    <p className="mt-1 line-clamp-3 max-h-20 overflow-y-auto">{context}</p>
-                </div>
-            )}
         </div>
     );
 };

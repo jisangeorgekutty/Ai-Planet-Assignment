@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Handle, Position } from "reactflow";
 import { Settings, FileInput } from "lucide-react";
+import { useWorkflowStore } from "../store/useWorkflowStore";
 
-const UserQueryNode = ({ data }) => {
+const UserQueryNode = () => {
   const [query, setQuery] = useState("");
+  const {setUserQuery}=useWorkflowStore();
+
+  useEffect(() => {
+    setUserQuery(query);
+    console.log("User Query set to:", query);
+  }, [query, setUserQuery]);
 
   return (
     <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
