@@ -23,8 +23,8 @@ const KnowledgeBaseNode = () => {
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
             {/* Handles */}
-            <Handle type="target" position={Position.Left} className="bg-orange-500 w-2 h-2" />
-            <Handle type="source" position={Position.Right} className="bg-orange-500 w-2 h-2" />
+            <Handle type="target" position={Position.Left} style={{ background: "#F97316", width: 8, height: 8 }} />
+            <Handle type="source" position={Position.Right} style={{ background: "#F97316", width: 8, height: 8 }} />
 
             {/* Header */}
             <div className="flex justify-between items-center mb-3">

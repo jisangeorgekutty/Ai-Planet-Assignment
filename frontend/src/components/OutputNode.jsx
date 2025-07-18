@@ -7,7 +7,7 @@ const OutputNode = () => {
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
             {/* Connection handles */}
-            <Handle type="target" position={Position.Top} className="bg-blue-500 w-2 h-2" />
+            <Handle type="target" position={Position.Top} style={{ background: "#22C55E", width: 8, height: 8 }} />
 
             <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-2">

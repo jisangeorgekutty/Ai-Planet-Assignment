@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bot, Eye } from "lucide-react";
+import { Sparkles, Eye, Settings } from "lucide-react";
 import { Handle, Position } from "reactflow";
 import { useWorkflowStore } from "../store/useWorkflowStore";
 
@@ -38,15 +38,20 @@ const LLMNode = () => {
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
             {/* React Flow Handles */}
-            <Handle type="target" position={Position.Top} className="bg-blue-500 w-2 h-2" />
-            <Handle type="source" position={Position.Bottom} className="bg-green-500 w-2 h-2" />
+            <Handle type="target" position={Position.Top} style={{ background: "#3B82F6", width: 8, height: 8 }} />
+            <Handle type="source" position={Position.Bottom} style={{ background: "#3B82F6", width: 8, height: 8 }} />
 
             {/* Header */}
-            <div className="flex items-center gap-2 mb-2">
-                <Bot className="text-purple-600 w-4 h-4" />
-                <h2 className="text-sm font-semibold">LLM</h2>
-            </div>
 
+            <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-2">
+                    <Sparkles className="text-gray-700 w-4 h-4" />
+                    <h2 className="text-sm font-semibold">LLM</h2>
+                </div>
+                <div className="text-gray-500">
+                    <Settings className="w-4 h-4 text-black cursor-pointer" />
+                </div>
+            </div>
             <div className="bg-blue-100 text-black text-xs font-medium px-2 py-1 rounded mb-3">
                 Run a query with OpenAI / Gemini LLM
             </div>
