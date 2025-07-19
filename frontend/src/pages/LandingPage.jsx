@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { ChevronDown } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
-// import axios from 'axios';
+
 
 function LandingPage() {
     const navigate = useNavigate();
     const { user, isLoaded, isSignedIn } = useUser();
-    // const [message, setMessage] = useState("");
+
 
     const handleGetStarted = () => {
         if (isLoaded && isSignedIn) {

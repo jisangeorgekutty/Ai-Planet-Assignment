@@ -4,11 +4,13 @@ import Sidebar from "../components/SideBar";
 import FlowCanvas from "../components/FlowCanvas";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useWorkflowStore } from "../store/useWorkflowStore";
 
 const WorkFlowPage = () => {
   const { stackId } = useParams();
   const [stack, setStack] = useState(null);
   console.log("Stack ID from URL:", stackId);
+  const { resetOutput } = useWorkflowStore();
   useEffect(() => {
     const fetchStack = async () => {
       try {
@@ -20,6 +22,7 @@ const WorkFlowPage = () => {
     };
 
     fetchStack();
+    resetOutput();
   }, [stackId]);
 
   if (!stack) {

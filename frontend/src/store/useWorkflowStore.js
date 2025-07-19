@@ -28,8 +28,8 @@ export const useWorkflowStore = create((set, get) => ({
         // toast.success('User Query Received');
     },
 
-    setKBInputs: ({ file, embeddingModel, apiKey, sampleContext }) => {
-        set({ file, embeddingModel, kbApiKey: apiKey, context: sampleContext })
+    setKBInputs: ({ file, embeddingModel, apiKey }) => {
+        set({ file, embeddingModel, kbApiKey: apiKey })
         console.log("Knowledge Base Inputs set:", { file, embeddingModel, apiKey });
     },
 
@@ -45,16 +45,16 @@ export const useWorkflowStore = create((set, get) => ({
         formData.append('api_key', kbApiKey);
         formData.append('user_query', userQuery);
         try {
-            // const response = await axios.post(
-            //     'http://localhost:8000/api/knowledge-base/upload-doc/',
-            //     formData,
-            //     {
-            //         headers: { 'Content-Type': 'multipart/form-data' },
-            //     }
-            // );
+            const response = await axios.post(
+                'http://localhost:8000/api/knowledge-base/upload-doc/',
+                formData,
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                }
+            );
 
-            // const context = response.data?.relevant_chunks?.join(' ') || '';
-            // set({ context: });
+            const responseContext = response.data?.relevant_chunks?.join(' ') || '';
+            set({ context:responseContext });
             toast.success('Context Generated');
             return context;
         } catch (error) {
@@ -92,7 +92,7 @@ export const useWorkflowStore = create((set, get) => ({
             return responseText;
         } catch (err) {
             console.error("LLM API Error:", err);
-            // toast.error("LLM API Failed");
+            toast.error("LLM API Failed");
         }
     },
 
@@ -133,8 +133,9 @@ export const useWorkflowStore = create((set, get) => ({
         }
     },
 
-
-
+    resetOutput: () => {
+        set({ output: "", chatMessages: [] });
+    },
 
 }));
 

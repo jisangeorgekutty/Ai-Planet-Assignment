@@ -8,17 +8,13 @@ const KnowledgeBaseNode = () => {
     const [embeddingModel, setEmbeddingModel] = useState("gemini-gecko");
     const [apiKey, setApiKey] = useState("");
     const [showApiKey, setShowApiKey] = useState(false);
-
-
-    const sampleContext = "Artificial Intelligence (AI) has the potential to revolutionize education by personalizing learning, automating administrative tasks, and providing real-time feedback to both students and teachers.However, challenges remain in areas such as data privacy, equity of access, and the need for teacher training.Successful integration of AI requires a careful balance between innovation and ethical considerations, ensuring that technology enhances rather than replaces the human element in education."
-
     const { setKBInputs } = useWorkflowStore();
 
     useEffect(() => {
         if (file && embeddingModel && apiKey) {
-            setKBInputs({ file, embeddingModel, apiKey, sampleContext });
+            setKBInputs({ file, embeddingModel, apiKey });
         }
-    }, [file, embeddingModel, apiKey, sampleContext]);
+    }, [file, embeddingModel, apiKey]);
 
     return (
         <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">

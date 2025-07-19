@@ -36,7 +36,9 @@ const LLMNode = () => {
 
 
     return (
-        <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xs relative border border-gray-200">
+        
+        <div className="bg-white shadow-md rounded-xl p-2 w-full max-w-xs relative border border-gray-200">
+            <p className="text-xs text-gray-500 mt-3 justify-center text-center items-center">Context</p>
             {/* React Flow Handles */}
             <Handle type="target" position={Position.Top} style={{ background: "#3B82F6", width: 8, height: 8 }} />
             <Handle type="source" position={Position.Bottom} style={{ background: "#3B82F6", width: 8, height: 8 }} />
@@ -142,7 +144,7 @@ const LLMNode = () => {
             )}
 
             {/* Output label (non-editable footer text style) */}
-            <div className="text-xs text-black mt-1 justify-center text-center">Output</div>
+            <div className="text-xs text-gray-500 mt-1 justify-center text-center">Output</div>
         </div>
     );
 };

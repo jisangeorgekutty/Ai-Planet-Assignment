@@ -33,7 +33,6 @@ const OutputNode = () => {
             </div>
 
             {/* Footer label */}
-            <p className="text-xs text-gray-500 mt-3">Output</p>
         </div>
     );
 };

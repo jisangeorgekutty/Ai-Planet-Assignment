@@ -43,7 +43,7 @@ const UserQueryNode = () => {
 
       {/* Submit button */}
       <div className="flex justify-center">  
-        <span className="py-1.5 mt-4 text-xs">Query</span>
+        <span className="py-1.5 mt-4 text-xs text-gray-500">Query</span>
       </div>
     </div>
   );
