@@ -12,7 +12,7 @@ A no-code/low-code web application that enables users to visually design and exe
 - Context-aware responses using OpenAI/Gemini LLMs
 - Real-time chat interface with memory
 - Workflow validation and execution engine
-- Optional:logs, chat history, and authentication
+- Secure user authentication
 
 ---
 
